@@ -15,6 +15,8 @@ namespace AdventureWorks_POC.Controllers
 {
     public class AccesoController : Controller
     {
+        // este controller funcionara nada mas para los metodos de login y registro de usuarios nuevos
+        
         static string cadena = "Data Source=(local);Initial Catalog=AdventureWorks;Integrated Security=true";
 
 
