@@ -1,0 +1,63 @@
+﻿@model List<AdventureWorks_POC.Models.Comments>
+@{
+    Layout = null;
+}
+
+<div>
+    @for(int x = 0; x < Model.Count; x++)
+            {
+        <div class="col-8 my-3 px-2 py-1 rounded" style="background-color: #0070fc30;">
+            <h5>De: @Model[x].UserName</h5>
+            <h5>Tema: @Model[x].Subject</h5>
+            <h5>Comentario: @Model[x].Body</h5>
+        </div>
+            }
+</div>
+
+@using (Html.BeginForm("SaveComment", "Detalles", FormMethod.Post))
+{
+    <input type="hidden" name="PhotoId" value="@ViewBag.PhotoId"/>
+    <div id="NewComContainer">
+
+    </div>
+}
+
+<input type="button" id="NewComment" value="Agregar comentario" onclick="AddNewCommentHtml();" class="btn btn-primary mb-3" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        setTimeout(function () {
+            $(".alert").fadeOut();
+        }, 3000);
+    });
+    function CancelComment() {       
+        $("#NewComment").removeClass("d-none");
+        $("#NewComContainer").html("");        
+    }
+
+    $(document).on("click", "#CancelComment", function () {
+        CancelComment();       
+    });
+    function AddNewCommentHtml(elm) {
+        $("#NewComment").addClass("d-none");        
+        var Html = "<div class=\"d-block border border-1 p-3 mb-3\" style=\"width:fit-content;\">" +
+                    "<label>De: <span>'@ViewBag.UserLogin.Username'</span></label>" +
+                    "<div>" +
+                    "<label>Tema:</label>" +
+                    "<input type=\"text\" class=\"form-control\" id=\"Subject\" name=\"Subject\" style=\"min-width:500px\" />" +
+                    "</div>" +
+                    "<div class=\"col-12 mb-3\">" +
+                    "<label>Comentario</label>" +
+                    "<input type=\"text\" class=\"form-control w-100\" id=\"Body\" name=\"Body\" style=\"min-width:500px\" />" +
+            "</div>" +
+            "<input type=\"submit\" id=\"SendComment\" value=\"Comentar\" onclick=\"\" class=\"btn btn-primary\" />" +
+"<input type=\"button\" id=\"CancelComment\" value=\"Cancelar\" class=\"btn btn-outline-danger mx-3\" />" +
+            "</div>";
+
+        $("#NewComContainer").append(Html);
+
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'  // puedes usar 'auto' si no quieres animación
+        });
+    }
+</script>
