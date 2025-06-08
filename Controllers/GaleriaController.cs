@@ -12,7 +12,7 @@ using System.Data;
 
 namespace AdventureWorks_POC.Controllers
 {
-    [ValidarSession]
+
     public class GaleriaController : Controller {
 
         private readonly SqlConnection _connection = new SqlConnection(Constans.cadena);
@@ -52,12 +52,13 @@ namespace AdventureWorks_POC.Controllers
             return View(Posts);
         }
 
-        //
+        [ValidarSession]
         public ActionResult SubirFoto() {
 
             return View();
         }
 
+        [ValidarSession]
         [HttpPost]
         public ActionResult SubirFoto(string title, string description)
         {
@@ -80,6 +81,7 @@ namespace AdventureWorks_POC.Controllers
             return RedirectToAction("Index");
         }
 
+        [ValidarSession]
         [HttpPost]
         public ActionResult GuardarFotoEnBD(string title, string description, byte[] photoBytes)
         {

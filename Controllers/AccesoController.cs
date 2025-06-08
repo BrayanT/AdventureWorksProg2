@@ -22,11 +22,19 @@ namespace AdventureWorks_POC.Controllers
 
         public ActionResult Login()
         {
+            if (Session["user"] != null){
+                // Ya hay sesión activa, redirige al home
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
         public ActionResult Registrar()
         {
+            if (Session["user"] != null){
+                // Ya hay sesión activa, redirige al home
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
