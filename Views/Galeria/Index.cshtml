@@ -1,0 +1,62 @@
+﻿@model List<AdventureWorks_POC.Models.Photo>
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .itm-post {
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+        .itm-post:hover {
+            transform: scale(1.01);
+        }
+</style>
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-success">@ViewBag.Mensaje</div>
+}
+<div class="d-flex justify-content-center">
+    <div class="py-4 d-flex row col-10">
+        @if (Model?.Count > 0)
+        {
+            for (int x = 0; x < Model.Count; x++)
+            {
+                <div class="col-4 p-2">
+                    <a href="@Url.Action("Index","Detalles", new { Id = Model[x].PhotoId })" class="text-decoration-none text-body">
+                        <div style="background-color: #f8f8f8; border:2px solid #efefef;" class="itm-post p-2 rounded shadow-sm" onmouseout="remShad(this);" onmouseover="addShad(this)">
+                            <h4 class="fw-normal text-truncate w-100 overflow-hidden text-nowrap">@Model[x].Title</h4>
+                            <h5>Por: <span class="text-primary">@Model[x].OwnerName</span></h5>
+                            <div class="d-flex justify-content-center overflow-hidden my-2" style="height:200px;">
+                                <img src="@Model[x].PhotoB64" style="max-height:max-content;" />
+                            </div>
+                            <h6>Creado en: @Model[x].CreatedDate.ToString("dd/MM/yyyy hh:mm tt")</h6>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <h3>No se encontraron publicaciones.</h3>
+        }
+    </div>
+</div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            $(".alert").fadeOut();
+        }, 3000);
+    });
+
+    function addShad(itm) {
+        $(itm).removeClass("shadow-sm");
+        $(itm).addClass("shadow");
+    }
+
+    function remShad(itm) {
+        $(itm).removeClass("shadow");
+        $(itm).addClass("shadow-sm");
+    }
+</script>

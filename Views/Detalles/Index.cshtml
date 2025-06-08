@@ -1,6 +1,6 @@
 ﻿@model AdventureWorks_POC.Models.Photo
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Index";    
 }
 <div class="d-flex col-md-8">
     <div class="col-6">
@@ -9,8 +9,12 @@
     </div>
     @if (ViewBag.UserLogin != null && Model.Owner == ViewBag.UserLogin.Username)
     {
+        using (Html.BeginForm("DeleteComment", "Detalles", FormMethod.Post, new { @id="DelForm"}))
+        {
+            @Html.HiddenFor(x => x.PhotoId)
+        }
         <div class="d-flex justify-content-end col-6 align-items-baseline">
-            <button class="btn btn-outline-danger">
+            <button id="DelPost" data-id="@Model.PhotoId" class="btn btn-outline-danger">
                 Eliminar <i class="bi bi-trash"></i>
             </button>
         </div>
@@ -33,12 +37,20 @@
 @if (ViewBag.MensajeError != null)
 {
     <input type="hidden" id="flagError" />
-    <div class="alert alert-danger">@ViewBag.MensajeError</div>    
+    <div class="alert alert-danger">@ViewBag.MensajeError</div>
 }
 
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<script>
+<script type="text/javascript">
+    window.addEventListener('DOMContentLoaded', function () {
+        $('#DelPost').click(function () {
+            if (confirm('¿Confirmas la eliminación?')) {
+                $("#DelForm").submit();
+            }
+        });
+    });
+   
     document.addEventListener("DOMContentLoaded", function () {
         fetch("@Url.Action("LoadComments", "Detalles")" + "?PhotoId=" + '@Model.PhotoId')
             .then(response => response.text())
@@ -48,5 +60,5 @@
                     AddNewCommentHtml();
                 }
             });
-    });
+    });    
 </script>

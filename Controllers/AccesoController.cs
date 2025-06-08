@@ -88,7 +88,7 @@ namespace AdventureWorks_POC.Controllers
 
             if(oUser.Username != "0"){
                 Session["user"] = oUser;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Galeria");
             }
             else{
                 ViewData["Mensaje"] = "Usuario no encontrado";
