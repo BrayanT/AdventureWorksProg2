@@ -7,7 +7,7 @@
         <h3>@Model.Title</h3>
         <h4>Por: <span class="text-primary">@Model.OwnerName</span></h4>
     </div>
-    @if (Model.Owner == ViewBag.UserLogin.Username)
+    @if (ViewBag.UserLogin != null && Model.Owner == ViewBag.UserLogin.Username)
     {
         using (Html.BeginForm("DeleteComment", "Detalles", FormMethod.Post, new { @id="DelForm"}))
         {
@@ -39,6 +39,7 @@
     <input type="hidden" id="flagError" />
     <div class="alert alert-danger">@ViewBag.MensajeError</div>
 }
+
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <script type="text/javascript">

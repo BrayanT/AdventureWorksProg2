@@ -8,6 +8,11 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+
+    @{
+        var user = Session["user"] as AdventureWorks_POC.Models.User;
+    }
+
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
         <div class="container">
             @Html.ActionLink("AdventureWorks", "Index", "Galeria", new { area = "" }, new { @class = "navbar-brand" })
@@ -17,12 +22,27 @@
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Inicio", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Detalles", "Index", "Detalles", new { area = "", Id = "2" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Galeria", "Index", "Galeria", new { area = "", Id = "4" }, new { @class = "nav-link" })</li>                    
-                    <li>@Html.ActionLink("Agregar foto", "SubirFoto", "Galeria", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Salir", "CerrarSesion", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Agregar Foto", "SubirFoto", "Galeria", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
-            </div>
+                @if (user != null)
+                {
+                    <span class="navbar-text text-white">
+                        Hola, @user.Username&nbsp;&nbsp;|&nbsp;&nbsp;
+                    </span>
+                    <span class="navbar-text text-white">
+                        @Html.ActionLink("Cerrar Sesion", "CerrarSesion", "Home", new { area = "" }, new { @class = "nav-link" })
+                    </span>
+                 }
+                 else {
+                    <span class="navbar-text text-white">
+                        @Html.ActionLink("Iniciar Sesion", "Login", "Acceso", new { area = "" }, new { @class = "nav-link" })
+                    </span>
+                 }
+                <span class="navbar-text text-white">
+                </div>
         </div>
     </nav>
     <div class="container body-content">
