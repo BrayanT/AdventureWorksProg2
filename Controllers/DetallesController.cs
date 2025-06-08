@@ -116,30 +116,30 @@ namespace AdventureWorks_POC.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteComment(int Id, int IdPost)
+        public ActionResult DeleteComment(int PhotoId)
         {
             int Result = 0;
-            if (Id > 0)
+            if (PhotoId > 0)
             {
                 User pSesion = Session["user"] as User;
                 using (SqlCommand cmd = new SqlCommand("DeletePhoto", _connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@PhotoID", Id);
+                    cmd.Parameters.AddWithValue("@PhotoID", PhotoId);
 
                     _connection.Open();
                     Result = cmd.ExecuteNonQuery();
                 }
             }
-            if (Result == 1)
+            if (Result >= 1)
             {
-                TempData["Mensaje"] = "Comentario eliminado correctamente.";
-                return RedirectToAction("Index", new { Id = IdPost });
+                TempData["Mensaje"] = "Publicación eliminada correctamente.";
+                return RedirectToAction("Index", "Galeria");
             }
             else
             {
                 TempData["Mensaje"] = "Ocurrió un error.";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", new { PhotoId });
             }
         }
     }

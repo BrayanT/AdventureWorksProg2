@@ -191,6 +191,7 @@
     <Content Include="Views\Detalles\Index.cshtml" />
     <Content Include="Views\Detalles\LoadComments.cshtml" />
     <Content Include="Views\Galeria\SubirFoto.cshtml" />
+    <Content Include="Views\Galeria\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

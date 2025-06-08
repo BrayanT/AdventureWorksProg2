@@ -20,7 +20,36 @@ namespace AdventureWorks_POC.Controllers
         // GET: Galeria
         public ActionResult Index()
         {
-            return View();
+            if (TempData["Mensaje"] != null)
+                ViewBag.Mensaje = TempData["Mensaje"];
+            List<Photo> Posts = new List<Photo>();
+            using (SqlCommand cmd = new SqlCommand("obtAllPosts", _connection))
+            {
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;                
+
+                _connection.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Posts.Add(new Photo()
+                        {
+                            PhotoId = (int)reader["PhotoID"],
+                            Title = reader["Title"].ToString(),
+                            PhotoFile = reader["PhotoFile"] as byte[],
+                            Description = reader["Description"].ToString(),
+                            CreatedDate = (DateTime)reader["CreatedDate"],
+                            Owner = reader["Owner"].ToString(),
+                            OwnerName = reader["Name"].ToString()
+                        });                        
+                    }
+                }
+                _connection.Close();
+            }
+
+            Posts.ForEach(x => x.PhotoB64 = $"data:image/jpeg;base64,{Convert.ToBase64String(x.PhotoFile)}");            
+            ViewBag.UserLogin = Session["user"];
+            return View(Posts);
         }
 
         //
