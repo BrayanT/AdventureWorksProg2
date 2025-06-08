@@ -9,12 +9,19 @@
     </div>
     @if (Model.Owner == ViewBag.UserLogin.Username)
     {
+
+
+@*@using (Html.BeginForm(){ })
+{
+
+
         <div class="d-flex justify-content-end col-6 align-items-baseline">
             <button class="btn btn-outline-danger">
                 Eliminar <i class="bi bi-trash"></i>
             </button>
         </div>
-    }
+    }*@
+}
 </div>
 <img src="@Model.PhotoB64" height="250" />
 

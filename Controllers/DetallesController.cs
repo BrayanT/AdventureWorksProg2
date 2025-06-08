@@ -78,7 +78,7 @@ namespace AdventureWorks_POC.Controllers
                             PhotoId = (int)reader["PhotoID"],
                             UserName = reader["Name"].ToString(),
                         });
-                       
+
                     }
                 }
                 _connection.Close();
@@ -112,7 +112,35 @@ namespace AdventureWorks_POC.Controllers
             }
 
             TempData["MensajeError"] = "Debes completar todos los campos.";
-            return RedirectToAction("Index", new { Id = Comentario.PhotoId });
+            return RedirectToAction("LoadComments", new { Id = Comentario.PhotoId });
+        }
+
+        [HttpPost]
+        public ActionResult DeleteComment(int Id, int IdPost)
+        {
+            int Result = 0;
+            if (Id > 0)
+            {
+                User pSesion = Session["user"] as User;
+                using (SqlCommand cmd = new SqlCommand("DeletePhoto", _connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@PhotoID", Id);
+
+                    _connection.Open();
+                    Result = cmd.ExecuteNonQuery();
+                }
+            }
+            if (Result == 1)
+            {
+                TempData["Mensaje"] = "Comentario eliminado correctamente.";
+                return RedirectToAction("Index", new { Id = IdPost });
+            }
+            else
+            {
+                TempData["Mensaje"] = "Ocurrió un error.";
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }
