@@ -1,46 +1,58 @@
 ﻿@model List<AdventureWorks_POC.Models.Comments>
 @{
     Layout = null;
+    var user = ViewBag.UserLogin as AdventureWorks_POC.Models.User;
 }
 
 <div>
-    @for(int x = 0; x < Model.Count; x++)
-            {
+    @for (int x = 0; x < Model.Count; x++)
+    {
         <div class="col-8 my-3 px-2 py-1 rounded" style="background-color: #0070fc30;">
             <h5>De: @Model[x].UserName</h5>
             <h5>Tema: @Model[x].Subject</h5>
             <h5>Comentario: @Model[x].Body</h5>
         </div>
-            }
+    }
 </div>
-
-@using (Html.BeginForm("SaveComment", "Detalles", FormMethod.Post))
+@if (user != null)
 {
-    <input type="hidden" name="PhotoId" value="@ViewBag.PhotoId"/>
-    <div id="NewComContainer">
+    using (Html.BeginForm("SaveComment", "Detalles", FormMethod.Post))
+    {
+        <input type="hidden" name="PhotoId" value="@ViewBag.PhotoId" />
+        <div id="NewComContainer"></div>
+    }
 
+    <input type="button" id="NewComment" value="Agregar comentario" onclick="AddNewCommentHtml();" class="btn btn-primary mb-3" />
+}
+else{
+    <div class="alert alert-info">
+        Debes <a href="@Url.Action("Login", "Acceso")">iniciar sesión</a> para comentar.
     </div>
 }
 
-<input type="button" id="NewComment" value="Agregar comentario" onclick="AddNewCommentHtml();" class="btn btn-primary mb-3" />
+
 <script type="text/javascript">
+    const currentUser = '@(user != null ? user.Username : "")';
+
     $(document).ready(function () {
         setTimeout(function () {
             $(".alert").fadeOut();
         }, 3000);
     });
-    function CancelComment() {       
+
+    function CancelComment() {
         $("#NewComment").removeClass("d-none");
-        $("#NewComContainer").html("");        
+        $("#NewComContainer").html("");
     }
 
     $(document).on("click", "#CancelComment", function () {
-        CancelComment();       
+        CancelComment();
     });
+
     function AddNewCommentHtml(elm) {
-        $("#NewComment").addClass("d-none");        
+        $("#NewComment").addClass("d-none");
         var Html = "<div class=\"d-block border border-1 p-3 mb-3\" style=\"width:fit-content;\">" +
-                    "<label>De: <span>'@ViewBag.UserLogin.Username'</span></label>" +
+                    "<label>De: <span>" + currentUser + "</span></label>" +
                     "<div>" +
                     "<label>Tema:</label>" +
                     "<input type=\"text\" class=\"form-control\" id=\"Subject\" name=\"Subject\" style=\"min-width:500px\" />" +

@@ -1,30 +1,29 @@
-﻿
-@{
-    ViewBag.Title = "SubirFoto";
+﻿@{
+    ViewBag.Title = "Subir Foto";
 }
 
-<h2>SubirFoto</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">Subir Foto</h2>
 
-@using (Html.BeginForm("SubirFoto", "Galeria", FormMethod.Post, new
-{
-    enctype = "multipart/form-data"
-}))
-{
-    <div>
-        <label for="title">Título:</label>
-        <input type="text" name="title" id="title" required />
-    </div>
-    <div>
-        <label for="PhotoFile">Foto (solo PNG o JPG):</label>
-        <input type="file" name="PhotoFile" id="PhotoFile" accept=".png, .jpg, .jpeg" required />
-    </div>
-    <div>
-        <label for="description">Descripción (opcional):</label>
-        <textarea name="description" id="description"></textarea>
-    </div>
-    <div>
-        <input type="submit" value="Subir Foto" />
-    </div>
+    @using (Html.BeginForm("SubirFoto", "Galeria", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group mb-3">
+            <label for="title">Título:</label>
+            <input type="text" name="title" id="title" class="form-control" placeholder="Ej: Vacaciones en la playa" required />
+        </div>
 
-}
+        <div class="form-group mb-3">
+            <label for="PhotoFile">Foto (solo PNG o JPG):</label>
+            <input type="file" name="PhotoFile" id="PhotoFile" class="form-control" accept=".png, .jpg, .jpeg" required />
+        </div>
 
+        <div class="form-group mb-3">
+            <label for="description">Descripción (opcional):</label>
+            <textarea name="description" id="description" class="form-control" rows="4" placeholder="Agrega una breve descripción..."></textarea>
+        </div>
+
+        <div>
+            <input type="submit" value="Subir Foto" class="btn btn-primary" />
+        </div>
+    }
+</div>

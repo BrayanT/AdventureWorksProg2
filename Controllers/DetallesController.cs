@@ -10,7 +10,7 @@ using AdventureWorks_POC.Models.Permisos;
 
 namespace AdventureWorks_POC.Controllers
 {
-    [ValidarSession]
+
     public class DetallesController : Controller
     {
         private readonly SqlConnection _connection = new SqlConnection(Constans.cadena);
@@ -88,6 +88,7 @@ namespace AdventureWorks_POC.Controllers
             return View(Comments);
         }
 
+        [ValidarSession]
         [HttpPost]
         public ActionResult SaveComment(Comments Comentario)
         {

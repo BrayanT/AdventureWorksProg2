@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using AdventureWorks_POC.Models;
 using System.Text;
 using System.Security.Cryptography;
 using System.Data.SqlClient;
@@ -17,7 +16,8 @@ namespace AdventureWorks_POC.Controllers
     {
         // este controller funcionara nada mas para los metodos de login y registro de usuarios nuevos
         
-        static string cadena = "Data Source=(local);Initial Catalog=AdventureWorks;Integrated Security=true";
+        //static string cadena = "Data Source=(local);Initial Catalog=AdventureWorks;Integrated Security=true";
+        private readonly SqlConnection _connection = new SqlConnection(Constans.cadena);
 
 
         public ActionResult Login()
@@ -45,8 +45,8 @@ namespace AdventureWorks_POC.Controllers
                 return View();
             }
 
-            using (SqlConnection cn = new SqlConnection(cadena)) { 
-                SqlCommand sqlCommand = new SqlCommand("sp_RegistrarUser", cn);
+            //using (SqlConnection cn = new SqlConnection(_connection)) { 
+                SqlCommand sqlCommand = new SqlCommand("sp_RegistrarUser", _connection);
                 sqlCommand.Parameters.AddWithValue("User", oUser.Username);
                 sqlCommand.Parameters.AddWithValue("Name", oUser.Name);
                 sqlCommand.Parameters.AddWithValue("Password", oUser.Password);
@@ -54,12 +54,12 @@ namespace AdventureWorks_POC.Controllers
                 sqlCommand.Parameters.Add("mensaje", SqlDbType.VarChar,100).Direction = ParameterDirection.Output;
                 sqlCommand.CommandType = CommandType.StoredProcedure;
 
-                cn.Open();
+                _connection.Open();
                 sqlCommand.ExecuteNonQuery();
 
                 registrado = Convert.ToBoolean(sqlCommand.Parameters["registrado"].Value);
                 mensaje = sqlCommand.Parameters["mensaje"].Value.ToString();
-            }
+            //}
 
             ViewData["Mensaje"] = mensaje;
 
@@ -76,15 +76,15 @@ namespace AdventureWorks_POC.Controllers
         {
             oUser.Password = ConvertirSha256(oUser.Password);
 
-            using (SqlConnection cn = new SqlConnection(cadena)){
-                SqlCommand sqlCommand = new SqlCommand("sp_ValidarUser", cn);
+            //using (SqlConnection cn = new SqlConnection(cadena)){
+                SqlCommand sqlCommand = new SqlCommand("sp_ValidarUser", _connection);
                 sqlCommand.Parameters.AddWithValue("User", oUser.Username);
                 sqlCommand.Parameters.AddWithValue("Password", oUser.Password);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
 
-                cn.Open();
+                _connection.Open();
                 oUser.Username = sqlCommand.ExecuteScalar().ToString();
-            }
+           // }
 
             if(oUser.Username != "0"){
                 Session["user"] = oUser;

@@ -44,10 +44,10 @@ namespace AdventureWorks_POC.Controllers
                         inputStream.CopyTo(memoryStream);
                         bytesArchivo = memoryStream.ToArray();
                     }
-                    GuardarFotoEnBD(title, description, bytesArchivo);
+                    return GuardarFotoEnBD(title, description, bytesArchivo);
                 }
             }
-
+            TempData["MensajeError"] = "No se seleccionó ningún archivo válido.";
             return RedirectToAction("Index");
         }
 
@@ -57,6 +57,7 @@ namespace AdventureWorks_POC.Controllers
             if (ModelState.IsValid)
             {
                 User pSesion = Session["user"] as User;
+                int newPhotoId;
 
                 using (SqlCommand cmd = new SqlCommand("InsertPhoto", _connection))
                 {
@@ -66,13 +67,20 @@ namespace AdventureWorks_POC.Controllers
                     cmd.Parameters.AddWithValue("@User", pSesion.Username);
                     cmd.Parameters.AddWithValue("@PhotoFile", photoBytes);
 
+                    // toma el id del registro recien creado 
+                    SqlParameter outputIdParam = new SqlParameter("@NewPhotoId", SqlDbType.Int){
+                        Direction = ParameterDirection.Output
+                    };
+                    cmd.Parameters.Add(outputIdParam);
+
                     _connection.Open();
                     cmd.ExecuteNonQuery();
+                    newPhotoId = Convert.ToInt32(outputIdParam.Value);
                 }
-                TempData["Mensaje"] = "Se Subio la foto exitosamente.";
-                return RedirectToAction("Index");
+                TempData["Mensaje"] = "Se Subió la foto exitosamente.";
+                return RedirectToAction("Index", "Detalles", new { Id = newPhotoId });
             }
-            TempData["MensajeError"] = "Fallo.";
+            TempData["MensajeError"] = "Ocurrió un error al subir la foto.";
             return RedirectToAction("Index");
         }
 
